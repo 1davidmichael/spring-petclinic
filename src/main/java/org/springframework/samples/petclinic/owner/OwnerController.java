@@ -36,6 +36,14 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.instrumentation.api.instrumenter.LocalRootSpan;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+
 /**
  * @author Juergen Hoeller
  * @author Ken Krebs
@@ -69,6 +77,11 @@ class OwnerController {
 
 	@GetMapping("/owners/new")
 	public String initCreationForm() {
+		// Update current span name
+		Span.current().updateName("foobar");
+
+		// Update root span name
+		LocalRootSpan.current().updateName("foobar");
 		return VIEWS_OWNER_CREATE_OR_UPDATE_FORM;
 	}
 
